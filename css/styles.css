@@ -71,7 +71,7 @@ nav h1 a {
     background-color: #eee;
     font-size: 17px;
     margin: 0;
-    width: calc(50% - 80px);
+    width: calc(100% - 80px);
 }
 
 /* Display list items side by side */
@@ -213,11 +213,18 @@ nav h1 a {
 }
 .inside #map-container {
   background: blue none repeat scroll 0 0;
-  height: 87%;
-  position: fixed;
+  height: 40vh;
+  position: relative;
   right: 0;
-  top: 80px;
-  width: 50%;
+  top: 130px;
+  width: 100%;
+}
+@media only screen and (min-width: 1200px) {
+  .inside #map-container {
+    height: 100vh;
+    position: fixed;
+    width: 50%;
+  }
 }
 .inside #map {
   background-color: #ccc;
@@ -227,7 +234,8 @@ nav h1 a {
 .inside #footer {
   bottom: 0;
   position: absolute;
-  width: 50%;
+  left: 0;
+  right: 0;
 }
 #restaurant-name {
   color: #f18200;
@@ -262,7 +270,7 @@ nav h1 a {
   border-bottom: 1px solid #d9d9d9;
   border-top: 1px solid #fff;
   padding: 140px 40px 30px;
-  width: 50%;
+  width: calc(100% - 80px);
 }
 #reviews-container {
   padding: 30px 40px 80px;
@@ -273,6 +281,61 @@ nav h1 a {
   font-weight: 300;
   letter-spacing: -1px;
   padding-bottom: 1pt;
+}
+
+@media only screen and (min-width: 700px) {
+  #restaurant-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  #restaurant-name {
+    flex-basis: 100%;
+  }
+  .restaurant-cuis-details {
+    width: 50%;
+  }
+  .restaurant-hours-details {
+    padding-left: 40px;
+    width: calc(50% - 40px);
+  }
+  /* #restaurants-list {
+    justify-content: center;
+  } */
+}
+
+@media only screen and (min-width: 1200px) {
+  #restaurant-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(50% - 80px);
+  }
+  #restaurant-name {
+    flex-basis: 100%;
+  }
+  .restaurant-cuis-details {
+    width: 100%;
+  }
+  .restaurant-hours-details {
+    padding-left: 0px;
+    width: 100%;
+  }
+  /* #restaurants-list {
+    justify-content: center;
+  } */
+}
+
+#reviews-list .review-name-date {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+#reviews-list .review-name-date .review-date {
+  text-align: right;
+}
+
+#reviews-list .review-name-date p {
+  flex-basis: calc(50% - 10px);
 }
 #reviews-list {
   margin: 0;
@@ -294,4 +357,30 @@ nav h1 a {
 }
 #restaurant-hours td {
   color: #666;
+}
+@media only screen and (min-width: 700px) {
+  #reviews-list li .review-date {
+    width: 40%;
+  }
+  #reviews-list .review-name-date .review-date {
+    width: 60%;
+  }
+  #reviews-list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  #reviews-list li {
+    width: 35%;
+    margin: 0 30px 30px 0;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  #reviews-container {
+    width: calc(50% - 80px);
+  }
+  #reviews-list li {
+    width: 100%;
+    margin: 0 30px 30px 0;
+  }
 }
