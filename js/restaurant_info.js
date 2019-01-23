@@ -1,6 +1,6 @@
 let restaurant;
 var newMap;
-
+let tabIndex = 1;
 /**
  * Initialize map as soon as the page is loaded.
  */
@@ -82,16 +82,21 @@ fetchRestaurantFromURL = (callback) => {
 fillRestaurantHTML = (restaurant = self.restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
+  name.tabIndex = 0;
 
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
+  address.tabIndex = 0;
 
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img'
   image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.alt = "Image for " + restaurant.cuisine_type + " food in " +restaurant.name;
+  image.tabIndex = 0;
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
+  cuisine.tabIndex = 0;
 
   // fill operating hours
   if (restaurant.operating_hours) {
@@ -128,12 +133,14 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
   const title = document.createElement('h2');
   title.innerHTML = 'Reviews';
+  title.tabIndex = 0;
   container.appendChild(title);
 
   if (!reviews) {
     const noReviews = document.createElement('p');
     noReviews.innerHTML = 'No reviews yet!';
     container.appendChild(noReviews);
+    container.tabIndex = 0;
     return;
   }
   const ul = document.getElementById('reviews-list');
@@ -148,26 +155,31 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
  */
 createReviewHTML = (review) => {
   const li = document.createElement('li');
+  li.tabIndex = 0;
   const reviewNameAndDateDiv = document.createElement('div');
   reviewNameAndDateDiv.className = 'review-name-date';
 
   const name = document.createElement('p');
   name.innerHTML = review.name;
   name.className = 'review-name';
+  name.tabIndex = 0;
   reviewNameAndDateDiv.appendChild(name);
 
   const date = document.createElement('p');
   date.innerHTML = review.date;
   date.className = 'review-date';
+  date.tabIndex = 0;
   reviewNameAndDateDiv.appendChild(date);
   li.appendChild(reviewNameAndDateDiv);
 
   const rating = document.createElement('p');
   rating.innerHTML = `Rating: ${review.rating}`;
+  rating.tabIndex = 0;
   li.appendChild(rating);
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;
+  comments.tabIndex = 0;
   li.appendChild(comments);
 
   return li;
