@@ -1,3 +1,6 @@
+/*
+Reference from: https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/
+*/
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js')
     .then(function(registration) {

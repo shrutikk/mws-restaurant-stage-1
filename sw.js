@@ -1,5 +1,8 @@
+/*
+Reference from: https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/
+*/
 let staticCacheName = 'restaurant-rev-cache';
-let urlsToCache = [
+let filesToCache = [
   './',
   './index.html',
   './restaurant.html',
@@ -24,7 +27,7 @@ let urlsToCache = [
 self.addEventListener('install', function(event) {
 	event.waitUntil(
 		caches.open(staticCacheName).then(function(cache) {
-			return cache.addAll(urlsToCache);
+			return cache.addAll(filesToCache);
         })
     );
 });
@@ -43,7 +46,9 @@ self.addEventListener('activate', function(event) {
         })
     );
 });
-
+/*
+Sends cached data if present.
+*/
 self.addEventListener('fetch', function(event) {
     event.respondWith(
         caches.match(event.request).then(function(response) {
