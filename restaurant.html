@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <!-- Normalize.css for better cross-browser consistency -->
@@ -19,9 +19,11 @@
       <h1><a href="/">Restaurant Reviews</a></h1>
     </nav>
     <!-- Beginning breadcrumb -->
-    <ul id="breadcrumb" tabindex="0">
-      <li><a href="/">Home</a></li>
-    </ul>
+    <nav aria-label="Breadcrumb" class="breadcrumb">
+      <ul id="breadcrumb" tabindex="0">
+        <li><a href="/">Home</a></li>
+      </ul>
+    </nav>
     <!-- End breadcrumb -->
     <!-- End nav -->
   </header>
@@ -36,7 +38,7 @@
     <!-- End map -->
     <!-- Beginning restaurant -->
     <section id="restaurant-container">
-      <h1 id="restaurant-name"></h1>
+      <h2 id="restaurant-name"></h2>
       <div class="restaurant-cuis-details" aria-label="Restaurant Cuisine Details">
         <img id="restaurant-img" alt="Restaurant Image">
         <p id="restaurant-cuisine"></p>
