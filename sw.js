@@ -10,6 +10,7 @@ let filesToCache = [
   './js/main.js',
   './js/restaurant_info.js',
   './js/dbhelper.js',
+  './js/data_helper.js',
   './js/sw_registration.js',
   './data/restaurants.json',
   './img/1.jpg',

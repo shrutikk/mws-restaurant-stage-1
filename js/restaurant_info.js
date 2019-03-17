@@ -4,7 +4,7 @@ let tabIndex = 1;
 /**
  * Initialize map as soon as the page is loaded.
  */
-document.addEventListener('DOMContentLoaded', (event) => {  
+document.addEventListener('DOMContentLoaded', (event) => {
   initMap();
 });
 
@@ -30,7 +30,7 @@ initMap = () => {
         id: 'mapbox.streets'    
       }).addTo(newMap);
       fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.newMap);
+      DataHelper.mapMarkerForRestaurant(self.restaurant, self.newMap);
     }
   });
 }  
@@ -46,7 +46,7 @@ initMap = () => {
         scrollwheel: false
       });
       fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+      DataHelper.mapMarkerForRestaurant(self.restaurant, self.map);
     }
   });
 } */
@@ -64,7 +64,7 @@ fetchRestaurantFromURL = (callback) => {
     error = 'No restaurant id in URL'
     callback(error, null);
   } else {
-    DBHelper.fetchRestaurantById(id, (error, restaurant) => {
+    DataHelper.fetchRestaurantById(id, (error, restaurant) => {
       self.restaurant = restaurant;
       if (!restaurant) {
         console.error(error);
@@ -90,7 +90,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const image = document.getElementById('restaurant-img');
   image.className = 'restaurant-img'
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  image.src = DataHelper.imageUrlForRestaurant(restaurant);
   image.alt = "Image for " + restaurant.cuisine_type + " food in " +restaurant.name;
   image.tabIndex = 0;
 
