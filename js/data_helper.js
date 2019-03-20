@@ -1,7 +1,14 @@
 class DataHelper {
-    static restaurants;
-    static cuisines;
-    static neighbhourhoods;
+
+    static getRestaurants() {
+        return this.restaurants;
+    };
+    static getCuisines() {
+        return this.cuisines;
+    };
+    static getNeighbhourhoods() {
+        return this.neighborhoods;
+    };
 
     static requestData(callback) {
         fetch('http://localhost:1337/restaurants')
@@ -11,7 +18,6 @@ class DataHelper {
         .then(function(myJson) {
             DataHelper.initializeData(myJson);
             callback(myJson);
-            console.log(JSON.stringify(myJson));
         });
     }
 
@@ -54,7 +60,7 @@ class DataHelper {
     }
 
     static mapMarkerForRestaurant(restaurant, map) {
-        // https://leafletjs.com/reference-1.3.0.html#marker  
+        // https://leafletjs.com/reference-1.3.0.html#marker
         const marker = new L.marker([restaurant.latlng.lat, restaurant.latlng.lng],
           {title: restaurant.name,
           alt: restaurant.name,
@@ -65,8 +71,10 @@ class DataHelper {
     }
 
     static fetchRestaurantById(id, callback) {
-        const restaurant = this.restaurants.filter((rest) => rest.id === id)[0];
-        callback(null, restaurant)
+        DataHelper.requestData((restaurants) => {
+            const restaurant = restaurants.filter((rest) => rest.id === parseInt(id))[0];
+            callback(null, restaurant);
+        });
     }
 
     static fetchRestaurantByCuisine(cuisine, callback) {

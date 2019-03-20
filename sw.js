@@ -1,6 +1,11 @@
 /*
 Reference from: https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/
 */
+
+if (typeof idb === "undefined") {
+    self.importScripts('js/idb.js');
+}
+
 let staticCacheName = 'restaurant-rev-cache';
 let filesToCache = [
   './',
@@ -26,6 +31,7 @@ let filesToCache = [
 ];
 
 self.addEventListener('install', function(event) {
+    createDB();
 	event.waitUntil(
 		caches.open(staticCacheName).then(function(cache) {
 			return cache.addAll(filesToCache);
@@ -34,6 +40,7 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('activate', function(event) {
+    addToDB();
     event.waitUntil(
         caches.keys().then(function(cacheNames) {
             return Promise.all(
@@ -51,9 +58,47 @@ self.addEventListener('activate', function(event) {
 Sends cached data if present.
 */
 self.addEventListener('fetch', function(event) {
-    event.respondWith(
-        caches.match(event.request).then(function(response) {
-            return response || fetch(event.request);
-        })
-    );
+    console.log(event.request);
+    if (event.request.url === 'http://localhost:1337/restaurants') {
+        event.respondWith(idb.open('restaurant-data', 1).then(function(db) {
+            var tx = db.transaction(['restaurants'], 'readonly');
+            var store = tx.objectStore('restaurants');
+            return store.getAll();
+          }).then(function(items){
+              return new Response(JSON.stringify(items));
+          }));
+    } else {
+        event.respondWith(
+            caches.match(event.request).then(function(response) {
+                return response || fetch(event.request);
+            })
+        );
+    }
 });
+
+function createDB() {
+    self.dbpromise = idb.open('restaurant-data', 1, function(upgradeDB) {
+      upgradeDB.createObjectStore('restaurants', {
+        keyPath: 'id'
+      });
+    });
+}
+
+function addToDB() {
+    fetch('http://localhost:1337/restaurants')
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(restaurants) {
+        let cuisines = new Set();
+        let neighborhoods = new Set();
+        self.dbpromise.then(function(db){
+            var tx = db.transaction(['restaurants'], 'readwrite');
+            var store = tx.objectStore('restaurants');
+            restaurants.forEach((restaurant, index) => {
+                store.add(restaurant);
+            });
+            return tx.complete;
+        });
+    });
+}

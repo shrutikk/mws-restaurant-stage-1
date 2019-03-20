@@ -1,0 +1,31 @@
+{
+  "name": "restaurants",
+  "version": "1.0.0",
+  "description": "--- #### _Three Stage Course Material Project - Restaurant Reviews_",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "babel": "babel --presets es2015 js/main.js -o build/main.bundle.js",
+    "start": "http-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shrutikk/mws-restaurant-stage-1.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shrutikk/mws-restaurant-stage-1/issues"
+  },
+  "homepage": "https://github.com/shrutikk/mws-restaurant-stage-1#readme",
+  "dependencies": {
+    "commonjs": "0.0.1",
+    "idb": "^4.0.0",
+    "require": "^2.4.20"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-es2015": "^6.24.1",
+    "http-server": "^0.11.1"
+  }
+}
