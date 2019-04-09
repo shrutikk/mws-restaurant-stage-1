@@ -81,6 +81,10 @@ function createDB() {
       upgradeDB.createObjectStore('restaurants', {
         keyPath: 'id'
       });
+      upgradeDB.createObjectStore('temp-reviews', {
+        keyPath: 'id',
+        autoIncrement: true
+      });
     });
 }
 

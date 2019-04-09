@@ -1,4 +1,5 @@
-class DataHelper {
+import "./idb.js";
+export default class DataHelper {
 
     static getRestaurants() {
         return this.restaurants;
@@ -59,7 +60,7 @@ class DataHelper {
         return (`./restaurant.html?id=${restaurant.id}`);
     }
 
-    static mapMarkerForRestaurant(restaurant, map) {
+    static mapMarkerForRestaurant(restaurant, newMap) {
         // https://leafletjs.com/reference-1.3.0.html#marker
         const marker = new L.marker([restaurant.latlng.lat, restaurant.latlng.lng],
           {title: restaurant.name,
@@ -70,10 +71,24 @@ class DataHelper {
         return marker;
     }
 
+
+    static fetchResterauntReviews(id, callback) {
+        fetch(`http://localhost:1337/reviews/?restaurant_id=${id}`)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(reviews) {
+            callback(reviews);
+        });
+    }
+
     static fetchRestaurantById(id, callback) {
         DataHelper.requestData((restaurants) => {
             const restaurant = restaurants.filter((rest) => rest.id === parseInt(id))[0];
-            callback(null, restaurant);
+            DataHelper.fetchResterauntReviews(id, (reviews) => {
+                restaurant.reviews = reviews;
+                callback(null, restaurant);
+            })
         });
     }
 
@@ -85,6 +100,50 @@ class DataHelper {
     static fetchRestaurantByNeighborhood(neighborhood, callback) {
         const restaurants = this.restaurants.filter((rest) => rest.neighborhood === neighborhood);
         callback(null, restaurants);
+    }
+
+    static submitReview(review) {
+        fetch('http://localhost:1337/reviews/', {
+            method: 'post',
+            body: JSON.stringify(review)
+        }).then(function(response) {
+            return response.json();
+        })
+        .catch((error) => {
+            idb.open('restaurant-data', 1, function(upgradeDB) {
+                return upgradeDB;
+            }).then(function(db) {
+                var tx = db.transaction(['temp-reviews'], 'readwrite');
+                var store = tx.objectStore('temp-reviews');
+                store.add(review);
+                return tx.complete;
+            });
+        })
+    }
+
+    static syncOfflineReviews() {
+        idb.open('restaurant-data', 1, function(upgradeDB) {
+            return upgradeDB;
+        }).then(function(db) {
+            var tx = db.transaction(['temp-reviews'], 'readwrite');
+            var store = tx.objectStore('temp-reviews');
+            const allTempReviews = store.getAll();
+            store.clear();
+            return allTempReviews;
+        }).then(function(tempReviews) {
+            console.log(tempReviews);
+            const fetchReqs = [];
+            tempReviews.forEach((review) => {
+                const fetchReq = fetch('http://localhost:1337/reviews/', {
+                    method: 'post',
+                    body: JSON.stringify(review)
+                });
+                fetchReqs.push(fetchReq);
+            });
+            Promise.all(fetchReqs).then(values => {
+                console.log("All temp reviews posted");
+            });
+        });
     }
 
 }
